@@ -1,0 +1,100 @@
+﻿@page "/learnblazor/bindprop"
+
+<div class="row">
+    <div class="col-6" border p-3>
+        <h3 class="text-primary">Product Playground</h3>
+        Name : @Product.Name
+        <br />
+        IsActive : @Product.IsActive
+        <br />
+        @* Using tenerary operator  *@
+        This Product is :@(Product.IsActive ? "Active" : "Inactive")
+        <br />
+        IsActive :
+        <input type="checkbox" @bind-value="@Product.IsActive" checked="@(Product.IsActive?"checked":null)" />
+        <br />
+        <br />
+        Product Properties:
+        <select @bind="selectedProp">
+            @foreach (var prop in Product.ProductProperties)
+            {
+                <option value="@prop.Key">@prop.Key</option>
+            }
+        </select>
+        <br />
+        SelectedProp: @selectedProp
+        @if (!string.IsNullOrEmpty(selectedProp))
+        {
+            <p>Selected Value: @Product.ProductProperties.FirstOrDefault(u => u.Key == selectedProp).Value</p>
+        }       
+        <br />
+        <br />
+    </div>
+
+    <div class="col-6" border p-3>
+        <h3 class="text-primary">Example - One Way Data Binding</h3>
+        <h3>Display value of property from the code. Can not update the value, from the display</h3>
+
+        Name : @Product.Name
+        <br />
+        IsActive : @Product.IsActive
+        <br />
+        Price : @Product.PriceOneWayBind
+        <br />
+        <br />
+        <br />
+
+        <h3>Example - Two Way Data Binding</h3>
+        <h3>Display value of property from the code. Can update the value, from the display</h3>
+        Price : @Product.PriceTwoWayBind
+        <br />
+        Input Price
+        <input type="number" @bind-value="@Product.PriceTwoWayBind" />        
+
+        <br />
+        <br />
+        <br />
+        <h3>Example - Two Way Data Binding. Does not update before user leave input field</h3>
+        <h3>Display value of property from the code. Can update the value, but not imidiatly</h3>
+        Price : @Product.PriceTwoWayBind
+        <br />
+        Input Price
+        <input type="number" @bind-value="@Product.PriceTwoWayBind" />
+
+        <br />
+        <br />
+        <br />
+        <h3>Example - Two Way Data Binding With Imidiate Update</h3>
+        <h3>With event handlers - There are different event handlers, to trigger when the input will update</h3>
+        <h3>Display value of property from the code. Can update the value, imidiatly</h3>
+        Price : @Product.PriceTwoWayBindUpdating
+        <br />
+        Input Price
+        <input type="number" @bind="@Product.PriceTwoWayBindUpdating" @bind:event="oninput" />
+        <br />
+        <br />
+    </div>
+</div>
+
+
+@code {
+    private string selectedProp = "";
+
+    Product Product = new()
+        {
+            Id = 1,
+            Name = "Product1",
+            IsActive = true,
+            PriceOneWayBind = 1,
+            PriceTwoWayBind = 5,
+            PriceTwoWayBindUpdating = 50,
+            ProductProperties = new List<Product_Prop>()
+            {
+                new Product_Prop{Id=1, Key="Color", Value = "Red"},
+                new Product_Prop{Id=2, Key="Size", Value = "20oz"},
+                new Product_Prop{Id=3, Key="Flavor", Value = "Rose"},
+            }
+        };
+
+
+}
