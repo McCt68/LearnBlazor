@@ -1,0 +1,44 @@
+﻿@page "/blazorviewportsize"
+
+@using BlazorPro.BlazorSize
+
+@inject ResizeListener resizeListener
+
+
+<h3>Blazor Viewport Size - NOT WORKING YET</h3>
+
+<h3>Viewport Size</h3>
+
+<p>Width: @viewportWidth px</p>
+<p>Height: @viewportHeight px</p>
+
+@code {
+    // test defualt value for
+    // public ResizeListener resizeListener { get; set; } 
+
+
+
+    private decimal viewportWidth;
+    private decimal viewportHeight;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var size = await resizeListener.GetBrowserWindowSize();
+        viewportWidth = size.Width;
+        viewportHeight = size.Height;
+
+        resizeListener.OnResized += OnResized;
+    }
+
+    private void OnResized(object? sender, BrowserWindowSize size)
+    {
+        viewportWidth = size.Width;
+        viewportHeight = size.Height;
+        InvokeAsync(StateHasChanged); // Update the UI when size changes
+    }
+
+    public void Dispose()
+    {
+        resizeListener.OnResized -= OnResized;
+    }
+}

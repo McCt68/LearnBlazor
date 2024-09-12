@@ -1,0 +1,135 @@
+﻿@page "/blazor-forms"
+
+<h3>BlazorForms</h3>
+
+<div class="col-12 offset-md-2 col-md-8 border">
+    <div class="text-center pt-4">
+        <h2 class="text-success"> Product Form</h2>
+        <hr />
+    </div>
+    <div class="mx-2 px-2">
+        <EditForm FormName="ProductCreate"
+                  Model="Product"
+                  OnValidSubmit="HandleProductCreate"
+                  OnInvalidSubmit="HandleProductCreateInvalid">
+
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group py-2">
+                Product Name
+                <InputText class="form-control" @bind-Value="@Product.Name">
+                </InputText>
+            </div>
+
+            <div class="form-group py-2">
+                Product Price
+                <InputNumber class="form-control" @bind-Value="@Product.Price">
+                </InputNumber>
+            </div>
+
+            <div class="form-group py-2">
+                Product PriceTwo WAy
+                <InputNumber class="form-control" @bind-Value="@Product.PriceTwoWayBind">
+                </InputNumber>
+            </div>
+
+            <div class="form-group py-2">
+                Category
+                <InputSelect class="form-select" @bind-Value="@Product.Category">
+                    @foreach(var cat in Enum.GetValues(typeof(Category)))
+                    {
+                        <option value="@cat">@cat</option>
+                    }
+                </InputSelect>                
+            </div>
+
+            <div class="form-group py-2">
+                IsActive
+                <InputCheckbox  @bind-Value="@Product.IsActive">
+                </InputCheckbox>
+            </div>
+
+            <div class="form-group py-2">
+                Aviable After
+                <InputDate class="form-control" @bind-Value="@Product.AviableAfter">
+                </InputDate>
+            </div>
+
+            <button type="submit" class="btn btn-primary my-3" style="width:200px;">
+                Create Product
+            </button>
+            <p class="text-success">@(IsProcessing == true ? "Processing..." : "")</p>
+        </EditForm>
+
+        <EditForm FormName="ProductCreateTemp"
+                  Model="ProductTemp"
+                  OnValidSubmit="HandleProductCreateTemp"
+                  OnInvalidSubmit="HandleProductCreateInvalid"></EditForm>
+    </div>
+
+    @if(CreatedProduct is not null)
+    {
+        <div class="mx-2 pt-4">
+            <hr />
+            <h2 class="text-success">Product Created</h2>
+            <div class="px-4">
+                Name: @CreatedProduct.Name <br />
+                Price: @CreatedProduct.Price <br />
+                Category: @CreatedProduct.Category <br />
+                IsActive: @CreatedProduct.IsActive <br />
+                Available After: @CreatedProduct.AviableAfter <br />
+             </div>
+        </div>
+    }
+
+</div>
+
+@code {
+
+    // Use to bind the form to the model for the EditForm Component
+    [SupplyParameterFromForm(FormName = "ProductCreate")]
+    public Product Product { get; set; } = new Product();
+
+    // Bind to another Form
+    [SupplyParameterFromForm(FormName = "ProductCreateTemp")]
+    public Product ProductTemp { get; set; } = new Product();
+
+    private Product? CreatedProduct{ get; set; }
+
+    private bool IsProcessing = false;  
+
+    // called when the form is submitted, by OnSubmit
+    private async Task HandleProductCreate()
+    {
+        IsProcessing = true;
+        CreatedProduct = null;
+        await Task.Delay(3000);        
+
+        CreatedProduct = Product;
+        Product = new(); // Clear selections in the form        
+
+        IsProcessing = false;
+    }
+
+    private async Task HandleProductCreateInvalid()
+    {
+        IsProcessing = true;
+
+        await Task.Delay(10_000);        
+
+        IsProcessing = false;
+    }
+
+    private async Task HandleProductCreateTemp()
+    {
+        IsProcessing = true;
+        CreatedProduct = null;
+        await Task.Delay(3000);
+
+        CreatedProduct = ProductTemp;
+        ProductTemp = new(); // Clear selections in the form        
+
+        IsProcessing = false;
+    }
+
+}

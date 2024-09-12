@@ -1,0 +1,55 @@
+﻿@page "/lifecycledatetimer"
+
+@using Microsoft.JSInterop;
+
+<div class="container">
+    <h1 @ref="countdownHeader" class="countdownHeaderClass">Blazor Countdown Timer</h1>
+    <p>Time remaining: @timeRemaining</p>
+</div>
+
+@code {
+    private ElementReference countdownHeader;
+    private string countdownHeaderClass = "green";
+    private DateTime targetTime;
+    private int timeRemaining;
+
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        targetTime = DateTime.Now.AddSeconds(10); // AddMinutes(1); // Set target time (10 minutes from now)
+        StartTimer();
+    }
+
+    // private async void StartTimer()
+    // {
+    //     while (DateTime.Now < targetTime)
+    //     {
+    //         timeRemaining = (int)(targetTime - DateTime.Now).TotalSeconds;
+    //         StateHasChanged();
+    //         await Task.Delay(1000); // Delay for 1 second
+    //     }
+    // }
+
+    private async Task StartTimer()
+    {
+        while (DateTime.Now < targetTime)
+        {
+            timeRemaining = (int)(targetTime - DateTime.Now).TotalSeconds;
+            StateHasChanged();
+
+            if (timeRemaining == 0)
+            {
+                countdownHeaderClass = "red";
+            }
+            else
+            {
+                countdownHeaderClass = "green";
+            }
+
+            await Task.Delay(1000); // Delay for 1 second
+        }
+    }
+}

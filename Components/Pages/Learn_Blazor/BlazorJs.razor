@@ -1,0 +1,70 @@
+﻿@page "/blazorjs"
+@using LearnBlazor.Helpers
+
+@* To be able to use Javascript I have to inject it into the component *@
+@inject IJSRuntime _JSRuntime
+
+<h3>Blazor JS - The Js Code is in Root.js</h3>
+
+<div class="row">
+    <button class="btn btn-secondary" @onclick="TestConfirmBox">Test Confirm Button</button>
+</div>
+
+<div class="row">
+    @if (ConfirmResult)
+    {
+        <p>Confirmation has been made!</p>
+    }
+    else
+    {
+        <p>Pending Confirmation</p>
+    }
+</div>
+
+<div class="row">
+    <button class="btn btn-success m-2" style="width:200px" @onclick="ToastrSucces">Toastr Succes</button> <br />
+    <button class="btn btn-danger m-2" style="width:200px" @onclick="ToastrFailure">Toastr Failure</button>
+</div>
+
+<div class="row">
+    <button class="btn btn-success m-2" style="width:200px" @onclick="SweetalertSuccess">Sweetalert Succes</button> <br />
+    <button class="btn btn-danger m-2" style="width:200px" @onclick="SweetalertFailure">Sweetalert Failure</button>
+</div>
+
+@code {
+    private string ConfirmMeaasage = "Are you sure you want to click here";
+
+    // Used to store what the js confirm box return
+    private bool ConfirmResult{ get; set; }
+
+    private async Task TestConfirmBox()
+    {
+        // Invoke confirm in javascript
+        ConfirmResult = await _JSRuntime.InvokeAsync<bool>("confirm", ConfirmMeaasage);
+    }
+
+    private async Task ToastrSucces()
+    {
+        // await _JSRuntime.InvokeVoidAsync("showToastr", "success", "Succes Notification");
+
+        // Another way by using a JSRUntime extension method i wrote, in the helpers folder
+        await _JSRuntime.ToastrSuccess("Success Notification");
+    }
+
+    private async Task ToastrFailure()
+    {
+        // await _JSRuntime.InvokeVoidAsync("showToastr", "error", "Error Notification");
+
+        await _JSRuntime.ToastrError("Error Notification");
+    }
+
+    private async Task SweetalertSuccess()
+    {
+        await _JSRuntime.InvokeVoidAsync("ShowSwal", "success", "Task Completed");
+    }
+
+    private async Task SweetalertFailure()
+    {
+        await _JSRuntime.InvokeVoidAsync("ShowSwal", "error", "Task Failed");
+    }
+}

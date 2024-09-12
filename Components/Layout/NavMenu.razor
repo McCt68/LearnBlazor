@@ -9,21 +9,66 @@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
         <div class="nav-item px-3">
+            @* The Navlink Tag adds some CSS so the user can see which route is selected *@
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
-        </div>
+        </div>        
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="/learnblazor/bindprop">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Bind Prop databinding
             </NavLink>
         </div>
 
         <div class="nav-item px-3">
-            <a class="nav-link" href="/learnblazor/bindprop">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Bind Prop databinding
-            </a>
+            <NavLink class="nav-link" href="/learnblazor/demoproduct">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Demo Product
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/learnblazor/parentComponent">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Parent / Child Relation
+            </NavLink>
+        </div>
+
+        @* Automatically scrools down to the targetElement tag id by setting #id *@
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/learnrouting#targetElement">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Learn Routing
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/blazor-forms">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Forms Demo
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/blazorjs">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Blazor JS
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/lifecycle">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Blazor LifeCycle
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/lifecycledatetimer">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> LifeCycle DateTimer
+            </NavLink>
+        </div>
+
+        @* Test showing viewportSize *@
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/blazorviewportsize">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> ViewPort Size
+            </NavLink>
         </div>
     </nav>
 </div>

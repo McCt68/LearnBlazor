@@ -1,0 +1,17 @@
+﻿
+
+<input type="button"
+       class="btn btn-danger"
+       style="width:100px"
+       value="Delete - @ProductId"
+/>
+<br />
+
+@code {
+
+    // I can pass a value from the parent component to this child. 
+    // I can access it with in the tag as an atributte
+    [Parameter] // In order to pass from parent
+    public int ProductId { get; set; }
+    
+}

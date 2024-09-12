@@ -1,0 +1,79 @@
+﻿@* I Can have multiply routes to the same component *@
+@page "/learnrouting"
+@page "/learnBlazor/learnrouting"
+
+@* Route with a parameter *@
+@page "/learnrouting/{Parameter1:int}"
+
+@* Route with more than 1 parameter, and defining the type of parameter1 *@
+@page "/learnrouting/{Parameter1:int}/{Parameter2}"
+
+@* Catch all parameters by using star *@
+@page "/learnrouting/catch-all/{*AllPageParameters}"
+
+@inject NavigationManager _NaviagtionManager
+
+<h3>LearnRouting</h3>
+
+<p>Parameter1: @Parameter1</p>
+<br />
+
+<p>Parameter2: @Parameter2</p>
+<br />
+
+<p>Parameter3: @Parameter3</p>
+<br />
+
+<p>All Page Parameters: @AllPageParameters</p>
+<br />
+
+@* I have to use NavigationManager to use this *@
+<a href="learnrouting?Parameter2=Learn&Parameter3=Blazor"
+   class="btn btn-primary">
+    Navigate to query parameter
+</a>
+<button class="btn btn-success" @onclick="LoadParameters">Load Parameters</button>
+<br />
+
+@* using a button do to something, and after that naviagate *@
+<button @onclick="NavigateToQueryParameter" class="btn btn-primary">Navigate to query parameter</button>
+
+<div class="bg-info" style="height:1000px">
+</div>
+
+@* The target element where the page should scroll to once it loads, its set in the NavLink tag *@
+<h2 id="targetElement">Main title</h2>
+
+@code {
+    // Passing a parameter to the route
+    [Parameter]
+    public int Parameter1 { get; set; }
+    [Parameter]
+    public string Parameter2 { get; set; } = String.Empty;
+    [Parameter]
+    public string Parameter3 { get; set; } = String.Empty;
+    [Parameter]
+    public string AllPageParameters { get; set; } = String.Empty;
+
+    // video 47
+    private void LoadParameters()
+    {
+        var uri = new Uri(_NaviagtionManager.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        Parameter2 = query["Parameter2"];
+        Parameter3 = query["Parameter3"];
+        // Force the whole page to reload
+        // _NaviagtionManager.Refresh(forceReload:true);
+    }
+
+    // Using a button to do something, and then navigate.
+    private void NavigateToQueryParameter()
+    {
+        // do something like a calculation or anything else
+
+        // There after Navigate
+        _NaviagtionManager.NavigateTo("learnrouting?Parameter2=Learn&Parameter3=Blazor");
+
+    }
+
+}

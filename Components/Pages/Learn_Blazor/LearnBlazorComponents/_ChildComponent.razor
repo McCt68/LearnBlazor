@@ -1,0 +1,55 @@
+﻿@using LearnBlazor.Helpers
+@inject IJSRuntime _JSRuntime
+
+<div>
+    <div class="alert alert-info">
+        @Title
+    </div>
+    @if (ChildSomeContent != null)
+    {
+        <div class="alert alert-success">
+            @ChildSomeContent
+        </div>
+    }
+    <button class="btn btn-danger" @onclick="@OnButtonClick">Click Me</button>
+
+    @* Using the GrandChildComponent *@
+    <_GrandChildComponent MessageFromGrandChild="@MessageFromGrandChild">
+
+    </_GrandChildComponent>
+</div>
+
+
+
+@code {
+
+    // I set the Title as an atribute when i use the child component in the parent
+    // The State is kind of passed from the parent i think ??
+    [Parameter]
+    public string Title { get; set; }
+
+    // Extracting the value from between the tags, when the child component is used in the parent component
+    [Parameter]
+    public RenderFragment ChildSomeContent { get; set; }
+
+    // Used for having an atribute that can call a method in the parent class
+    // Note i can NOT do it this way if the method has parameters. If that was the case then I would -
+    // need to create the actual method inside the child component like i did with the_IndividualComponent
+    [Parameter]
+    public EventCallback OnButtonClick { get; set; }
+
+    // I think here is more suited to use CascadingParameter in the grandChild - 
+    // Since I am not using this parameter in this child. 
+    // Here it is only used to pass the value donw to the GrandChild
+    [Parameter]
+    public string MessageFromGrandChild { get; set; }
+
+    // Using JS - Method that i can invoke in the parent component
+    public async Task ToastrSucces()
+    {
+        // await _JSRuntime.InvokeVoidAsync("showToastr", "success", "Succes Notification");
+
+        // Another way by using a JSRUntime extension method i wrote, in the helpers folder
+        await _JSRuntime.ToastrSuccess("Success Notification");
+    }
+}

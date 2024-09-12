@@ -1,0 +1,34 @@
+﻿@page "/learnblazor/parentComponent"
+
+<h3>ParentComponent</h3>
+
+<_ChildComponent 
+    @ref="childComponent"
+    OnButtonClick="ShowMessage" 
+    Title="This title is passed as a parameter from parent component"
+    MessageFromGrandChild="This message is passed from Parent Component to Grand Child Component">
+    <ChildSomeContent> Text between the Tags from Parent Component !!</ChildSomeContent>
+</_ChildComponent>
+
+<p>@messageText</p> <hr />
+
+<div class="row">
+    <p>Using a JS method from the child component</p>
+    <button class="btn btn-success" @onclick="()=>childComponent.ToastrSucces()">Show Toast Using JS method from ChildComponent</button>
+</div>
+
+@* <_ChildComponent Title="This title is passed as a parameter from parent component">
+    
+</_ChildComponent> *@
+
+@code {
+    // reference variable to i can refer to the child component and use its JS methods
+    private _ChildComponent childComponent;
+
+    public string messageText = string.Empty;
+
+    private void ShowMessage()
+    {
+        messageText = "Button inside child component was clicked";
+    }
+}

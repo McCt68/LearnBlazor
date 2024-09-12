@@ -1,0 +1,109 @@
+﻿@page "/learnblazor/demoproduct"
+
+<h2 class="text-primary">DemoProduct</h2>
+<p>Favorite Count : @FavoriteCount</p>
+<p>Selected Product : @SelectedProduct</p>
+
+<div class="p-2 mt-2"></div>
+<div class="row">
+    @foreach(var prod in ProductList)
+    {
+        <_IndividualProductComponent 
+            Product="prod"
+            OnFavoriteUpdated="FavoriteCountChange"
+            OnSelectedProductChange="UpdateSelectedProduct">
+
+        </_IndividualProductComponent>
+    }
+        <div class="row pt-4">            
+            <input 
+                type="button"
+                class="btn btn-success"
+                style="width:100px"
+                value="Counter"
+                @onclick="()=>IncrementCount(5)" />
+            Count : @Count <br />
+        </div>        
+</div>
+
+@code {
+    public int Count { get; set; } = 0;    
+    public int FavoriteCount { get; set; } = 0;
+    public string SelectedProduct { get; set; } = string.Empty;
+
+    List<Product> ProductList = new();
+
+    // Lifecycle event that is called when this class is initialized -
+    // Here I could populate the ProductList with Products from a DB, or API
+    protected override void OnInitialized()
+    {
+        ProductList.Add(new()
+            {
+                Id = 1,
+                Name = "Midnight Blaze",
+                IsActive = false,
+                PriceTwoWayBindUpdating = 5.99,
+                ProductProperties = new List<Product_Prop>()
+                {
+                    new Product_Prop { Id = 1, Key = "Flavor", Value = "Rose"},
+                    new Product_Prop { Id = 2, Key = "Size", Value = "20oz"},
+                    new Product_Prop { Id = 3, Key = "Color", Value="Purple" }
+                }
+            });
+
+        ProductList.Add(new()
+            {
+                Id = 2,
+                Name = "Blossom Lily",
+                IsActive = true,
+                PriceTwoWayBindUpdating = 5.99,
+                ProductProperties = new List<Product_Prop>()
+                {
+                    new Product_Prop { Id = 1, Key = "Flavor", Value = "Lily" },
+                    new Product_Prop { Id = 2, Key = "Size", Value = "18oz" },
+                    new Product_Prop { Id = 3,Key = "Color",Value = "White"}
+                }
+            });            
+    }
+
+    // If I need to pass a parameter to the caller i need to provide this method as a lambda function -
+    // to the @onclick event that is using this method as an argument
+    private void IncrementCount(int number)
+    {
+        Count = Count + number;
+    }
+
+    private void DeleteProduct(int productId)
+    {          
+        // FirstOrDefault iterates over the ProductList, and in each iteration,
+        // the current item in the list is referred to as currentProduct.
+        // When it finds the first occurrence in the ProductList where the Id
+        // matches productId, it returns that item. If no match is found, it returns null.
+        var prod = ProductList.FirstOrDefault(currrentProduct => currrentProduct.Id == productId);
+        // var prod = ProductList.FirstOrDefault(u => u.Id == productId); // same as above
+
+        if(prod != null)
+        {
+            ProductList.Remove(prod);
+        }        
+    }
+
+    // 
+    protected void FavoriteCountChange(bool isSelected )
+    {
+        if(isSelected == true)
+        {
+            FavoriteCount++;
+        }
+        else
+        {
+            FavoriteCount--;
+        }
+    }
+
+    //
+    protected void UpdateSelectedProduct(string prodcutName)
+    {
+        SelectedProduct = prodcutName;
+    }
+}
